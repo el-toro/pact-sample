@@ -1,0 +1,50 @@
+group 'org.eltoro'
+version '1.0-SNAPSHOT'
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'au.com.dius:pact-jvm-provider-gradle_2.11:2.1.10'
+  }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'au.com.dius.pact'
+
+sourceCompatibility = 1.5
+
+repositories {
+  mavenCentral()
+}
+
+pact {
+  serviceProviders {
+    ContactInformationProvider {
+      protocol = 'http'
+      host = 'localhost'
+      port = 8080
+      path = '/provider'
+
+      hasPactsWith('manyConsumers') {
+
+        pactFileLocation = file('../pact-consumer/target/pacts')
+      }
+    }
+  }
+}
+
+dependencies {
+  compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+
+  compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+  compile("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+  compile("org.springframework:spring-beans:$springVersion")
+  compile("org.springframework:spring-context:$springVersion")
+  compile("org.springframework:spring-web:$springVersion")
+  compile("org.springframework:spring-webmvc:$springVersion")
+  compile("org.springframework:spring-test:$springVersion")
+}

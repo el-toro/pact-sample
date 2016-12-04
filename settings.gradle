@@ -1,0 +1,4 @@
+rootProject.name = 'pact-sample'
+include 'pact-consumer'
+include 'pact-provider'
+
