@@ -21,14 +21,14 @@ class ContractInformationClientServiceTest extends Specification {
     def contactInformationPactService = new PactBuilder()
     given:
     def stubPort = 5555
-
+    def id = "1234"
     contractInformationClientService.providerUrl = "http://localhost:$stubPort"
     contactInformationPactService {
       serviceConsumer("Consumer")
       hasPactWith("Contact Information Provider")
-      uponReceiving("a retrieve contract information request")
+      uponReceiving("a contract information retrieval request")
       port(stubPort)
-      withAttributes([method: 'GET', path: '/contactinformation'])
+      withAttributes([method: 'GET', path: "/contactinformation/$id"])
       willRespondWith(
           status: 200,
           headers: ['Content-Type': 'application/json;charset=UTF-8'],
@@ -40,7 +40,7 @@ class ContractInformationClientServiceTest extends Specification {
 
     when:
     VerificationResult result = contactInformationPactService.run {
-      def responseEntity = contractInformationClientService.getContractInformation()
+      def responseEntity = contractInformationClientService.getContractInformation(id)
 
       assert responseEntity.statusCode == HttpStatus.OK
       assert responseEntity.headers.containsKey(HttpHeaders.CONTENT_TYPE)

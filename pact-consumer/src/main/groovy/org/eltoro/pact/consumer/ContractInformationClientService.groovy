@@ -14,7 +14,7 @@ class ContractInformationClientService {
 
   RestOperations restOperations = new RestTemplate()
 
-  ResponseEntity getContractInformation(){
-    restOperations.getForEntity("$providerUrl/contactinformation", Map)
+  ResponseEntity getContractInformation(String id){
+    restOperations.getForEntity("$providerUrl/contactinformation/$id", Map)
   }
 }
